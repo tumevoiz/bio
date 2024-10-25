@@ -1,0 +1,7 @@
+# bio
+
+## Package
+```
+./gradlew shadowJar
+```
+
