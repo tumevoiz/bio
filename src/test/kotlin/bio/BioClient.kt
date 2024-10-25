@@ -14,10 +14,12 @@ import org.http4k.filter.OpenTelemetryTracing
 fun main() {
     val client: HttpHandler = OkHttp()
 
-    val printingClient: HttpHandler = PrintResponse()
+    val printingClient: HttpHandler =
+        PrintResponse()
             .then(ClientFilters.OpenTelemetryTracing())
             .then(ClientFilters.OpenTelemetryMetrics.RequestCounter())
-            .then(ClientFilters.OpenTelemetryMetrics.RequestTimer()).then(client)
+            .then(ClientFilters.OpenTelemetryMetrics.RequestTimer())
+            .then(client)
 
     val response: Response = printingClient(Request(GET, "http://localhost:9000/ping"))
 

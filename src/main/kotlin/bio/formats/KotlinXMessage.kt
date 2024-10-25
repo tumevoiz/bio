@@ -11,8 +11,9 @@ import org.http4k.format.KotlinxSerialization.string
 val kotlinXMessageLens = Body.json().toLens()
 
 @Suppress("MagicNumber", "ClassNaming")
-val kotlinXMessage = obj(
-    "thisIsAString" to string("stringValue"),
-    "thisIsANumber" to number(12345),
-    "thisIsAList" to array(listOf(boolean(true)))
-)
+val kotlinXMessage =
+    obj(
+        "thisIsAString" to string("stringValue"),
+        "thisIsANumber" to number(12345),
+        "thisIsAList" to array(listOf(boolean(true))),
+    )

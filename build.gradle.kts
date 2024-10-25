@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm") version "2.0.20"
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.gitlab.arturbosch.detekt") version("1.23.7")
+    id("io.gitlab.arturbosch.detekt") version ("1.23.7")
 }
 
 buildscript {
@@ -26,7 +26,7 @@ kotlin {
 }
 
 application {
-    mainClass = "bio.bioKt"
+    mainClass = "bio.BioApplicationKt"
 }
 
 tasks {
@@ -61,9 +61,7 @@ tasks {
         sourceCompatibility = VERSION_11
         targetCompatibility = VERSION_11
     }
-
 }
-
 
 dependencies {
     implementation(platform("org.http4k:http4k-bom:5.32.4.0"))
@@ -83,5 +81,3 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.1")
 }
-
-
