@@ -46,6 +46,8 @@ val app: HttpHandler = routes(
         descriptionPath = "/swagger.json"
     
         // You can use security filter tio protect routes
+
+        @Suppress("MagicNumber")
         security = ApiKeySecurity(Query.int().required("api"), { it == 42 }) // Allow only requests with &api=42
     
         // Add contract routes
@@ -63,6 +65,7 @@ fun main() {
             .then(ServerFilters.OpenTelemetryMetrics.RequestCounter())
             .then(ServerFilters.OpenTelemetryMetrics.RequestTimer()).then(app)
 
+    @Suppress("MagicNumber")
     val server = printingApp.asServer(Undertow(9000)).start()
 
     println("Server started on " + server.port())

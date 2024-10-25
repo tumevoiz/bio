@@ -9,6 +9,7 @@ import org.http4k.kotest.shouldHaveStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
+@Suppress("ClassNaming")
 class bioTest {
 
     @Test
