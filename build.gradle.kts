@@ -60,7 +60,9 @@ tasks {
         sourceCompatibility = VERSION_11
         targetCompatibility = VERSION_11
     }
+
 }
+
 
 dependencies {
     implementation(platform("org.http4k:http4k-bom:5.32.4.0"))
@@ -80,4 +82,5 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.1")
 }
+
 

@@ -23,5 +23,11 @@
 hs_err_pid*
 replay_pid*
 
+# Gradle
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/
+build/
+.kotlin
+
 # IntelliJ
 .idea/
