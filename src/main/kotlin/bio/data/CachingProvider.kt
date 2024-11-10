@@ -8,7 +8,7 @@ import bio.auth.Token
  */
 abstract class CachingProvider<T : Token> : AuthenticationCachingFeatures<T> {
     protected val tokenName = { username: String -> "${username}_token" }
-    protected val tokenValue = { value: String, fingerprint: String -> "${value}:${fingerprint}" }
+    protected val tokenValue = { value: String, fingerprint: String -> "$value:$fingerprint" }
     protected val parseToken = { tokenWithFingerprint: String ->
         val s = tokenWithFingerprint.split(":")
         Pair(s[0], s[1])

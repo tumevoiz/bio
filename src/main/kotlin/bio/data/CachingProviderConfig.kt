@@ -2,7 +2,9 @@ package bio.data
 
 import java.util.Properties
 
-class CachingProviderConfig(override val properties: Properties) : Config() {
+class CachingProviderConfig(
+    override val properties: Properties,
+) : Config() {
     val host: String = properties.getProperty(CONFIG_CACHE_HOST_KEY)
     val port: String = properties.getProperty(CONFIG_CACHE_PORT_KEY)
     val username: String = properties.getProperty(CONFIG_CACHE_USERNAME_KEY)

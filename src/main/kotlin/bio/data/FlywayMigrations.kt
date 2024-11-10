@@ -10,11 +10,15 @@ object FlywayMigrations {
         logger.info("Starting migrations.")
         properties?.let {
             logger.info("Loaded properties.")
-            val flyway = Flyway.configure().dataSource(
-                it.url, it.username, it.password,
-            )
-                .baselineOnMigrate(true)
-                .load()
+            val flyway =
+                Flyway
+                    .configure()
+                    .dataSource(
+                        it.url,
+                        it.username,
+                        it.password,
+                    ).baselineOnMigrate(true)
+                    .load()
 
             flyway.migrate()
         }

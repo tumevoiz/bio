@@ -16,10 +16,11 @@ abstract class Config {
          * `fromApplicationConfig` loads properties automatically from .properties files in `resources` folder.
          */
         inline fun <reified C : Config> fromApplicationConfig(propertiesFileName: String): C? {
-            val inputStream: InputStream = C::class.java
-                .classLoader
-                .getResourceAsStream("${propertiesFileName}.properties")
-                ?: throw IOException("Cannot find properties file!")
+            val inputStream: InputStream =
+                C::class.java
+                    .classLoader
+                    .getResourceAsStream("$propertiesFileName.properties")
+                    ?: throw IOException("Cannot find properties file!")
 
             val properties = Properties()
             properties.load(inputStream)
@@ -37,4 +38,3 @@ abstract class Config {
         const val INTEGRATION_TESTS_DB = "db-test"
     }
 }
-

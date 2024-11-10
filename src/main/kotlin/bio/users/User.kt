@@ -5,9 +5,8 @@ data class User(
     val password: HashedPassword,
 )
 
-fun UserRow.toDomainObject(): User {
-    return User(
+fun UserRow.toDomainObject(): User =
+    User(
         username = this.username,
         password = this.password,
     )
-}

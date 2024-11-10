@@ -13,7 +13,9 @@ class HashableTests {
         // given
         val expected = "override"
 
-        class ExampleHashable(override val value: String) : Hashable
+        class ExampleHashable(
+            override val value: String,
+        ) : Hashable
 
         // when
         val actual = ExampleHashable("test1234").hash<OverrideHashingAlgorithm>()
@@ -25,7 +27,9 @@ class HashableTests {
     @Test
     fun `should noop hash`() {
         // given
-        class ExampleHashable(override val value: String) : Hashable
+        class ExampleHashable(
+            override val value: String,
+        ) : Hashable
 
         val expected = "test"
 

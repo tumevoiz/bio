@@ -3,10 +3,10 @@ package bio.itests
 import bio.auth.bearer.BearerTokenAuthenticationService
 import bio.data.CachingProviderConfig
 import bio.data.Config
+import bio.data.FlywayMigrations
+import bio.data.RedisCachingProvider
 import bio.data.SQLConfig
 import bio.data.SQLConnector
-import bio.data.RedisCachingProvider
-import bio.data.FlywayMigrations
 import bio.prelude.NoopHashAlgorithm
 import bio.users.UnsafeUserRepository
 import bio.users.UserService

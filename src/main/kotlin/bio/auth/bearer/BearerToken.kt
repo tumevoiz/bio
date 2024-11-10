@@ -2,11 +2,11 @@ package bio.auth.bearer
 
 import bio.auth.Token
 
-class BearerToken(override val value: String) : Token {
+class BearerToken(
+    override val value: String,
+) : Token {
     companion object {
-        fun generateToken(): BearerToken {
-            return BearerToken("test")
-        }
+        fun generateToken(): BearerToken = BearerToken("test")
 
         const val FINGERPRINT: String = "bearer"
     }
@@ -14,10 +14,11 @@ class BearerToken(override val value: String) : Token {
     override fun equals(other: Any?): Boolean {
         var equals = false
         other?.let {
-            equals = when (it) {
-                is BearerToken -> it.value == this.value
-                else -> false
-            }
+            equals =
+                when (it) {
+                    is BearerToken -> it.value == this.value
+                    else -> false
+                }
         }
 
         return equals

@@ -15,15 +15,17 @@ class AuthenticationTests : IntegrationTestCase() {
         ensureMigrated()
 
         // when
-        val request = UserCreationRequest(
-            username = "test",
-            password = PlaintextPassword("test"),
-        )
+        val request =
+            UserCreationRequest(
+                username = "test",
+                password = PlaintextPassword("test"),
+            )
 
-        val authRequest = AuthenticationRequest(
-            username = request.username,
-            password = request.password,
-        )
+        val authRequest =
+            AuthenticationRequest(
+                username = request.username,
+                password = request.password,
+            )
 
         assertDoesNotThrow {
             userService.createUser(request)
@@ -36,15 +38,17 @@ class AuthenticationTests : IntegrationTestCase() {
     @Test
     fun `should not authenticate user with bad password`() {
         ensureMigrated()
-        val request = UserCreationRequest(
-            username = "test",
-            password = PlaintextPassword("test"),
-        )
+        val request =
+            UserCreationRequest(
+                username = "test",
+                password = PlaintextPassword("test"),
+            )
 
-        val authRequest = AuthenticationRequest(
-            username = request.username,
-            password = PlaintextPassword("other_password"),
-        )
+        val authRequest =
+            AuthenticationRequest(
+                username = request.username,
+                password = PlaintextPassword("other_password"),
+            )
 
         assertThrows<InvalidCredentialsAuthenticationException> {
             authenticationService.authenticate(authRequest)

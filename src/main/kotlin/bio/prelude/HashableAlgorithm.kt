@@ -2,16 +2,20 @@ package bio.prelude
 
 interface HashingAlgorithm {
     fun hash(input: String): HashedString
-    fun check(plain: String, hash: HashedString): Boolean
+
+    fun check(
+        plain: String,
+        hash: HashedString,
+    ): Boolean
 }
 
 class NoopHashAlgorithm : HashingAlgorithm {
-    override fun hash(input: String): HashedString {
-        return input
-    }
+    override fun hash(input: String): HashedString = input
 
-    override fun check(plain: String, hash: HashedString): Boolean =
-        plain == hash
+    override fun check(
+        plain: String,
+        hash: HashedString,
+    ): Boolean = plain == hash
 }
 
 /**
@@ -21,12 +25,12 @@ class NoopHashAlgorithm : HashingAlgorithm {
  * > NOTE: USE ONLY FOR TESTS PURPOSES.
  */
 class OverrideHashingAlgorithm : HashingAlgorithm {
-    override fun hash(input: String): HashedString {
-        return "override"
-    }
+    override fun hash(input: String): HashedString = "override"
 
-    override fun check(plain: String, hash: HashedString): Boolean =
-        hash == "override"
+    override fun check(
+        plain: String,
+        hash: HashedString,
+    ): Boolean = hash == "override"
 }
 
 // TODO: Add argon2 hashing algorithm

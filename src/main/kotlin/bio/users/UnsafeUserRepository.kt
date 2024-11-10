@@ -6,7 +6,9 @@ import java.util.UUID
 /**
  * Unsafe user repository implementation that contains the potential vulnerabilities like SQL injection.
  */
-class UnsafeUserRepository(connector: SQLConnector) : UserRepository {
+class UnsafeUserRepository(
+    connector: SQLConnector,
+) : UserRepository {
     private val connection = connector.retrieve()
 
     override fun findByUsername(username: String): UserRow? {
@@ -38,7 +40,7 @@ class UnsafeUserRepository(connector: SQLConnector) : UserRepository {
     }
 
     private val findByUsernameQuery = { username: String ->
-        "select * from users WHERE username='${username}'"
+        "select * from users WHERE username='$username'"
     }
 
     private val createUserUpdate = { row: UserRow ->

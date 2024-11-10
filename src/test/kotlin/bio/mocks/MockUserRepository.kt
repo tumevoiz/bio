@@ -7,9 +7,7 @@ import java.util.UUID
 class MockUserRepository : UserRepository {
     private val rows: MutableList<UserRow> = mutableListOf()
 
-    override fun findByUsername(username: String): UserRow? {
-        return rows.find { row -> row.username == username }
-    }
+    override fun findByUsername(username: String): UserRow? = rows.find { row -> row.username == username }
 
     override fun create(row: UserRow): UserRow {
         rows.add(row)

@@ -9,21 +9,16 @@ data class UserRow(
     val username: String,
     val password: HashedPassword,
 ) : RowClass<UUID> {
-    override fun id(): UUID {
-        return id
-    }
+    override fun id(): UUID = id
 
-    override fun tableName(): String {
-        return "users"
-    }
+    override fun tableName(): String = "users"
 
     companion object {
-        fun fromResultSet(rs: ResultSet): UserRow {
-            return UserRow(
+        fun fromResultSet(rs: ResultSet): UserRow =
+            UserRow(
                 id = UUID.fromString(rs.getString("id")),
                 username = rs.getString("username"),
                 password = HashedPassword(rs.getString("password")),
             )
-        }
     }
 }

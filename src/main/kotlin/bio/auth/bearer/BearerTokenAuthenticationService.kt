@@ -17,8 +17,9 @@ class BearerTokenAuthenticationService(
 //    private val hashingAlgorithm: HashingAlgorithm by di.instance()
 
     override fun authenticate(authenticationRequest: AuthenticationRequest): BearerToken {
-        val user = userRepository.findByUsername(authenticationRequest.username)
-            ?: throw InvalidCredentialsAuthenticationException()
+        val user =
+            userRepository.findByUsername(authenticationRequest.username)
+                ?: throw InvalidCredentialsAuthenticationException()
 
         if (!hashingAlgorithm.check(authenticationRequest.password.value, user.password.value)) {
             throw InvalidCredentialsAuthenticationException()
@@ -32,7 +33,10 @@ class BearerTokenAuthenticationService(
         return token
     }
 
-    override fun isAuthenticated(username: String, token: BearerToken): Boolean {
+    override fun isAuthenticated(
+        username: String,
+        token: BearerToken,
+    ): Boolean {
         val foundToken = cachingProvider.getTokenForUser(username)
         return foundToken == token
     }

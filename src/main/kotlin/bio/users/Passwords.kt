@@ -14,13 +14,13 @@ data class HashedPassword(
     override fun toString(): String = value
 }
 
-
 /**
  * `PlaintextPassword` represents the plaintext password.
  * It's used for type safety between plaintext and hashed content in the code.
  */
 data class PlaintextPassword(
     override val value: String,
-) : Password, Hashable {
+) : Password,
+    Hashable {
     override fun toString(): String = value
 }

@@ -8,4 +8,3 @@ interface Token {
     val value: String
     val fingerprint: String
 }
-
