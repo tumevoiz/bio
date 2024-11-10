@@ -1,8 +1,5 @@
 package bio
 
-import bio.formats.kotlinXMessage
-import bio.formats.kotlinXMessageLens
-import bio.routes.ExampleContractRoute
 import org.http4k.contract.bind
 import org.http4k.contract.contract
 import org.http4k.contract.openapi.ApiInfo
@@ -13,7 +10,6 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Response
 import org.http4k.core.Status.Companion.OK
 import org.http4k.core.then
-import org.http4k.core.with
 import org.http4k.filter.DebuggingFilters.PrintRequest
 import org.http4k.filter.OpenTelemetryMetrics
 import org.http4k.filter.OpenTelemetryTracing
@@ -30,9 +26,6 @@ val app: HttpHandler =
         "/ping" bind GET to {
             Response(OK).body("pong")
         },
-        "/formats/json/kotlinx" bind GET to {
-            Response(OK).with(kotlinXMessageLens of kotlinXMessage)
-        },
         "/testing/kotest" bind GET to { request ->
             Response(OK).body("Echo '${request.bodyString()}'")
         },
@@ -47,9 +40,6 @@ val app: HttpHandler =
 
                 @Suppress("MagicNumber")
                 security = ApiKeySecurity(Query.int().required("api"), { it == 42 }) // Allow only requests with &api=42
-
-                // Add contract routes
-                routes += ExampleContractRoute()
             },
         "/metrics" bind GET to {
             Response(OK).body("Example metrics route for bio")
