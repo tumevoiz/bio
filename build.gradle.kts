@@ -83,6 +83,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.12")
     implementation("org.slf4j:slf4j-api:2.0.16")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:10.21.0")
+    implementation("de.mkammerer:argon2-jvm:2.11")
     testImplementation("org.http4k:http4k-testing-approval")
     testImplementation("org.http4k:http4k-testing-hamkrest")
     testImplementation("org.http4k:http4k-testing-kotest")

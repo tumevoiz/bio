@@ -1,5 +1,7 @@
 package bio.prelude
 
+import de.mkammerer.argon2.Argon2Factory
+
 interface HashingAlgorithm {
     fun hash(input: String): HashedString
 
@@ -33,4 +35,15 @@ class OverrideHashingAlgorithm : HashingAlgorithm {
     ): Boolean = hash == "override"
 }
 
-// TODO: Add argon2 hashing algorithm
+class Argon2HashingAlgorithm: HashingAlgorithm {
+    private val argon2 = Argon2Factory.create()
+
+    override fun hash(input: String): HashedString {
+        return argon2.hash(10, 65536, 1, input.toCharArray())
+    }
+
+    override fun check(plain: String, hash: HashedString): Boolean {
+        return argon2.verify(hash, plain.toCharArray())
+    }
+
+}
