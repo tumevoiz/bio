@@ -1,61 +1,75 @@
 package bio
 
+import bio.auth.AuthenticationRoutes
+import bio.auth.BearerTokenAuthenticationService
+import bio.data.*
+import bio.prelude.Argon2HashingAlgorithm
+import bio.users.UnsafeUserRepository
+import bio.users.UserRepository
+import bio.users.UserRoutes
+import bio.users.UserService
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic
 import org.http4k.contract.bind
 import org.http4k.contract.contract
+import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
+import org.http4k.contract.openapi.v3.ApiServer
 import org.http4k.contract.openapi.v3.OpenApi3
-import org.http4k.contract.security.ApiKeySecurity
-import org.http4k.core.HttpHandler
-import org.http4k.core.Method.GET
-import org.http4k.core.Response
+import org.http4k.contract.security.BasicAuthSecurity
+import org.http4k.contract.ui.swaggerUiLite
+import org.http4k.core.*
+import org.http4k.core.Method.*
 import org.http4k.core.Status.Companion.OK
-import org.http4k.core.then
+import org.http4k.filter.CorsPolicy
 import org.http4k.filter.DebuggingFilters.PrintRequest
 import org.http4k.filter.OpenTelemetryMetrics
 import org.http4k.filter.OpenTelemetryTracing
 import org.http4k.filter.ServerFilters
-import org.http4k.lens.Query
-import org.http4k.lens.int
+import org.http4k.format.Jackson
+import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 
-val app: HttpHandler =
-    routes(
-        "/ping" bind GET to {
-            Response(OK).body("pong")
-        },
-        "/testing/kotest" bind GET to { request ->
-            Response(OK).body("Echo '${request.bodyString()}'")
-        },
-        "/contract/api/v1" bind
-            contract {
-                renderer = OpenApi3(ApiInfo("bio API", "v1.0"))
-
-                // Return Swagger API definition under /contract/api/v1/swagger.json
-                descriptionPath = "/swagger.json"
-
-                // You can use security filter tio protect routes
-
-                @Suppress("MagicNumber")
-                security = ApiKeySecurity(Query.int().required("api"), { it == 42 }) // Allow only requests with &api=42
-            },
-        "/metrics" bind GET to {
-            Response(OK).body("Example metrics route for bio")
-        },
-    )
+private const val HTTP_SERVER_PORT = 9000
 
 fun main() {
-    val printingApp: HttpHandler =
-        PrintRequest()
-            .then(ServerFilters.OpenTelemetryTracing())
-            .then(ServerFilters.OpenTelemetryMetrics.RequestCounter())
-            .then(ServerFilters.OpenTelemetryMetrics.RequestTimer())
-            .then(app)
+    val cachingProviderConfig = Config.fromApplicationConfig<CachingProviderConfig>(Config.CACHE)
+    val sqlConfig = Config.fromApplicationConfig<SQLConfig>(Config.DB)
 
-    @Suppress("MagicNumber")
-    val server = printingApp.asServer(Undertow(9000)).start()
+    val cachingProvider = RedisCachingProvider(cachingProviderConfig)
+    val connector = SQLConnector(sqlConfig)
+    val hashingAlgorithm = Argon2HashingAlgorithm()
+
+    val userRepository = UnsafeUserRepository(connector)
+
+    val authenticationService = BearerTokenAuthenticationService(cachingProvider, userRepository, hashingAlgorithm)
+
+    val authenticationRoutes = AuthenticationRoutes(authenticationService)
+
+    val userService = UserService(hashingAlgorithm, userRepository)
+    val userRoutes = UserRoutes(userService)
+
+    val contract = contract {
+        renderer = OpenApi3(
+            ApiInfo("Bio API", "v1.0"),
+            Jackson,
+            servers = listOf(ApiServer(Uri.of("http://localhost:9000")))
+        )
+        descriptionPath = "/docs/openapi.json"
+        routes += authenticationRoutes.login()
+        routes += userRoutes.createUser()
+    }
+
+    val api = routes(
+        "/api" bind contract,
+        swaggerUiLite {
+            url = "/api/docs/openapi.json"
+        }
+    )
+
+    val server = ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive).then(api).asServer(Undertow(HTTP_SERVER_PORT)).start()
 
     println("Server started on " + server.port())
 }

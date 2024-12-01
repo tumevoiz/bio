@@ -2,8 +2,8 @@ package bio.tests
 
 import bio.auth.AuthenticationRequest
 import bio.auth.InvalidCredentialsAuthenticationException
-import bio.auth.bearer.BearerToken
-import bio.auth.bearer.BearerTokenAuthenticationService
+import bio.auth.BearerToken
+import bio.auth.BearerTokenAuthenticationService
 import bio.data.CachingProvider
 import bio.mocks.MockCachingProvider
 import bio.mocks.MockUserRepository
