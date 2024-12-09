@@ -1,9 +1,5 @@
-package bio.auth.bearer
+package bio.auth
 
-import bio.auth.AuthenticationRequest
-import bio.auth.AuthenticationService
-import bio.auth.InvalidCredentialsAuthenticationException
-import bio.auth.TokenGenerationException
 import bio.data.CachingProvider
 import bio.prelude.HashingAlgorithm
 import bio.users.UserRepository

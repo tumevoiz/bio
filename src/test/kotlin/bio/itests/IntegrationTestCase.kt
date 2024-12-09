@@ -1,6 +1,6 @@
 package bio.itests
 
-import bio.auth.bearer.BearerTokenAuthenticationService
+import bio.auth.BearerTokenAuthenticationService
 import bio.data.CachingProviderConfig
 import bio.data.Config
 import bio.data.FlywayMigrations

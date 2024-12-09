@@ -2,7 +2,7 @@ package bio.data
 
 import bio.auth.InvalidTokenException
 import bio.auth.MalformedTokenException
-import bio.auth.bearer.BearerToken
+import bio.auth.BearerToken
 import redis.clients.jedis.DefaultJedisClientConfig
 import redis.clients.jedis.HostAndPort
 import redis.clients.jedis.JedisPooled

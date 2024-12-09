@@ -1,7 +1,7 @@
 package bio.mocks
 
 import bio.auth.InvalidTokenException
-import bio.auth.bearer.BearerToken
+import bio.auth.BearerToken
 import bio.data.CachingProvider
 
 class MockCachingProvider : CachingProvider<BearerToken>() {

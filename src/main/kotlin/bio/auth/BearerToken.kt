@@ -1,9 +1,11 @@
-package bio.auth.bearer
+package bio.auth
 
-import bio.auth.Token
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.annotation.JsonCreator.Mode.DELEGATING as m
 
-class BearerToken(
-    override val value: String,
+data class BearerToken @JsonCreator(mode = m) constructor(
+    @JsonValue override val value: String,
 ) : Token {
     companion object {
         fun generateToken(): BearerToken = BearerToken("test")
