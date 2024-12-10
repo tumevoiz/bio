@@ -15,7 +15,7 @@ class UserRoutes(private val userService: UserService) {
         return "/users" meta {
             summary = "Create user"
             description = "Create an user"
-            receiving(userCreationRequestLens)
+            receiving(userCreationRequestLens to UserCreationRequest("dobry@jezu", PlaintextPassword("anaszpanie")))
             returning(Status.OK to "User creation status.")
         } bindContract Method.POST to { req: Request ->
             userCreationRequestLens(req).let { userCreationRequest ->

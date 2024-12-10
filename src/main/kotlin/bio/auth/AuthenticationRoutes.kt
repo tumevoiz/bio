@@ -1,5 +1,6 @@
 package bio.auth
 
+import bio.users.PlaintextPassword
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.meta
 import org.http4k.core.*
@@ -13,7 +14,7 @@ class AuthenticationRoutes(private val authenticationService: AuthenticationServ
         return "/login" meta {
             summary = "Login"
             description = "Authenticate a user"
-            receiving(authenticationRequestLens)
+            receiving(authenticationRequestLens to AuthenticationRequest("dobry@jezu", PlaintextPassword("anaszpanie")))
             returning(OK to "Authentication token")
         } bindContract Method.POST to { req: Request ->
             authenticationRequestLens(req).let { authenticationRequest ->
