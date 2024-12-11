@@ -1,0 +1,12 @@
+CREATE TABLE messages (
+    id SERIAL NOT NULL,
+    user_id VARCHAR(36) NOT NULL,
+    channel_id SERIAL NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (channel_id) REFERENCES channels(id) ON DELETE CASCADE
+);

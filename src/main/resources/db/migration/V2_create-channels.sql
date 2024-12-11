@@ -1,0 +1,6 @@
+CREATE TABLE channels (
+    id SERIAL NOT NULL,
+    name VARCHAR(50) NOT NULL UNIQUE,
+
+    PRIMARY KEY (id)
+);
