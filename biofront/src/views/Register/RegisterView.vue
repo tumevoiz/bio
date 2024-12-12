@@ -1,17 +1,25 @@
 <template>
-  <div class="register">
-    <h1>Register</h1>
-    <form @submit.prevent="registerUser">
-      <label for="username">Username:</label>
-      <input type="text" v-model="username" id="username" required />
+  <div class="register-container">
+    <div class="register-box">
+      <h1>BIO PROJEKT</h1>
+      <form @submit.prevent="registerUser">
+        <label for="username">Login:</label>
+        <input type="text" v-model="username" id="username" required placeholder="Wpisz swój login" />
 
-      <label for="password">Password:</label>
-      <input type="password" v-model="password" id="password" required />
+        <label for="password">Hasło:</label>
+        <input type="password" v-model="password" id="password" required placeholder="Wpisz swoje hasło" />
 
-      <button type="submit">Register</button>
-    </form>
+        <button type="submit" class="btn-submit">Zarejestruj się</button>
+      </form>
+      <p class="login-link">Masz już konto?<router-link to="/login">Zaloguj się</router-link></p>
+    </div>
   </div>
 </template>
+
+<style>
+@import 'RegisterView.css';
+</style>
+
 
 <script lang="ts">
 import { ref } from 'vue';

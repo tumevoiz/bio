@@ -20,12 +20,12 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'), // Lazy-loading LoginView
+      component: () => import('../views/Login/LoginView.vue'), // Lazy-loading LoginView
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../views/RegisterView.vue'), // Lazy-loading RegisterView
+      component: () => import('../views/Register/RegisterView.vue'), // Lazy-loading RegisterView
     },
   ],
 })
