@@ -7,13 +7,14 @@ class MessageService(
     private val messageRepository: MessageRepository,
 ) {
     fun createMessage(request: MessageCreationRequest): Message {
+        // TODO: userId as a parameter
         val messageRow =
             MessageRow(
-                id = request.id,
+                id = UUID.randomUUID(),
                 userId = request.userId,
-                channelId = request.chanelId,
+                channelId = request.channelId,
                 message = request.message,
-                sentAt = request.sentAt,
+                sentAt = OffsetDateTime.now(),
             )
 
         val createdMessageRow = messageRepository.create(messageRow)

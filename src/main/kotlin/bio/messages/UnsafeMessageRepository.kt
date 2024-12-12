@@ -3,7 +3,7 @@ package bio.messages
 import bio.data.SQLConnector
 import java.util.UUID
 
-class UnsafeMessageRepository (
+class UnsafeMessageRepository(
     connector: SQLConnector,
 ) : MessageRepository {
     private val connection = connector.retrieve()
@@ -21,7 +21,7 @@ class UnsafeMessageRepository (
         }
     }
 
-    override fun delete(id: Int): Boolean {
+    override fun delete(id: UUID): Boolean {
         TODO("Not yet implemented")
     }
 
@@ -29,7 +29,7 @@ class UnsafeMessageRepository (
         "insert into messages values ('${row.id}', '${row.userId}', '${row.channelId}', '${row.message}', '${row.sentAt}')"
     }
 
-    override fun findAllMessages(): Collection<MessageRow> {
+    override fun findAllMessages(): List<MessageRow> {
         TODO("Not yet implemented")
     }
 
@@ -37,11 +37,12 @@ class UnsafeMessageRepository (
         TODO("Not yet implemented")
     }
 
-    override fun findMessageByChanelId(channelId: Int): MessageRow? {
+    override fun findMessageByChanelId(channelId: UUID): MessageRow? {
         TODO("Not yet implemented")
     }
 
-    override fun findMessageByContent(message: String?): MessageRow? {
+    override fun findMessageByContent(message: String): MessageRow? {
         TODO("Not yet implemented")
     }
+
 }

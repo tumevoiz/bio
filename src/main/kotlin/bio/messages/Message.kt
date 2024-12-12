@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class Message(
     val userId: UUID,
-    val channelId: Int,
+    val channelId: UUID,
     val message: String,
     val sentAt: OffsetDateTime,
 )
