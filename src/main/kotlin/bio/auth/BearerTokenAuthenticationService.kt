@@ -48,4 +48,18 @@ class BearerTokenAuthenticationService(
         val foundToken = cachingProvider.getTokenForUser(username)
         return foundToken == token
     }
+
+    fun refreshToken(username: String): BearerToken {
+        val user = userRepository.findByUsername(username)
+            ?: throw InvalidCredentialsAuthenticationException()
+
+        val newToken = BearerToken.generateToken()
+
+        if (!cachingProvider.saveToken(newToken, username)) {
+            throw TokenGenerationException()
+        }
+
+        return newToken
+    }
+
 }
