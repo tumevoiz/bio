@@ -17,6 +17,18 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/messages',
+      name: 'messages',
+      component: () => import('../views/MessagesView.vue'),
+      children: [
+        {
+          path: 'channel/:id',
+          name: 'channel',
+          component: import('../views/ChannelView.vue'),
+        },
+      ]
+    },
   ],
 })
 
