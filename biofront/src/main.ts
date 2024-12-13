@@ -17,7 +17,6 @@ import 'quasar/src/css/index.sass'
 
 
 const app = createApp(App)
-
 app.use(router)
 
 app.use(Quasar, {
