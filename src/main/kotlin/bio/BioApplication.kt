@@ -3,10 +3,16 @@ package bio
 import bio.auth.AuthenticationFilter
 import bio.auth.AuthenticationRoutes
 import bio.auth.BearerTokenAuthenticationService
+import bio.channels.ChannelRoutes
+import bio.channels.ChannelService
+import bio.channels.UnsafeChannelRepository
 import bio.data.*
 import bio.prelude.Argon2HashingAlgorithm
 import bio.users.*
 import org.http4k.contract.ContractRoute
+import bio.messages.MessageRoutes
+import bio.messages.MessageService
+import bio.messages.UnsafeMessageRepository
 import org.http4k.contract.bind
 import org.http4k.contract.contract
 import org.http4k.contract.meta
@@ -35,14 +41,21 @@ fun main() {
     val hashingAlgorithm = Argon2HashingAlgorithm()
 
     val userRepository = UnsafeUserRepository(connector)
+    val channelRepository = UnsafeChannelRepository(connector)
+    val messageRepository = UnsafeMessageRepository(connector)
 
     val authenticationService = BearerTokenAuthenticationService(cachingProvider, userRepository, hashingAlgorithm)
+    val channelService = ChannelService(channelRepository)
 
     val authenticationRoutes = AuthenticationRoutes(authenticationService)
     val authFilter = AuthenticationFilter(authenticationService)
 
     val userService = UserService(hashingAlgorithm, userRepository)
     val userRoutes = UserRoutes(userService)
+
+    val channelRoutes = ChannelRoutes(channelService)
+    val messageService = MessageService(messageRepository)
+    val messageRoutes = MessageRoutes(messageService)
 
     val contract = contract {
         renderer = OpenApi3(
@@ -54,6 +67,9 @@ fun main() {
         routes += authenticationRoutes.login()
         routes += userRoutes.createUser()
         routes += healthRoute(authFilter)
+        routes += channelRoutes.createChannel()
+        routes += channelRoutes.getChannels()
+        routes += messageRoutes.createMessage()
     }
 
     val api = routes(
