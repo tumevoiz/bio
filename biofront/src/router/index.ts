@@ -42,4 +42,20 @@ const router = createRouter({
   ],
 })
 
+// Middleware do autoryzacji
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  const token = localStorage.getItem('token')
+
+  if (requiresAuth && !token) {
+    next('/login')
+  } else if ((to.name === 'login' || to.name === 'register') && token) {
+    next('/')
+  } else {
+    next()
+  }
+})
+
+
 export default router
