@@ -55,7 +55,6 @@ fun main() {
     val userRoutes = UserRoutes(userService)
 
     val channelRoutes = ChannelRoutes(channelService)
-    val messageService = MessageService(messageRepository)
     val messageRoutes = MessageRoutes(messageService)
 
     val contract = contract {
