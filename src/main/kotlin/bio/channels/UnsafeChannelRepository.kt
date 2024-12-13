@@ -3,6 +3,7 @@ package bio.channels
 import bio.data.SQLConnector
 import java.sql.Connection
 import java.sql.Statement
+import java.util.UUID
 
 class UnsafeChannelRepository(
     connector: SQLConnector,
@@ -24,24 +25,21 @@ class UnsafeChannelRepository(
 
     override fun create(row: ChannelRow): ChannelRow? {
         return connection?.let {
-            val st = it.prepareStatement("insert into channels(name) values('${row.name}')", Statement.RETURN_GENERATED_KEYS);
+            val st = it.prepareStatement("insert into channels(id,name) values('${row.id}','${row.name}')");
             val affected = st.executeUpdate();
 
             if (affected > 0) {
                 val st2 = it.createStatement();
-                if (st.generatedKeys.next()) {
-                    val insertedId = st.generatedKeys.getInt("id");
-                    val rs = st2.executeQuery("select id, name from channels where id = $insertedId");
-                    if(rs.next()){
-                        return ChannelRow.fromResultSet(rs)
-                    }
+                val rs = st2.executeQuery("select id, name from channels where id = '${row.id}'");
+                if(rs.next()){
+                    return ChannelRow.fromResultSet(rs)
                 }
             }
             return null;
         };
     }
 
-    override fun delete(id: Int): Boolean {
+    override fun delete(id: UUID): Boolean {
         TODO("Not yet implemented")
     }
 

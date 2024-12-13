@@ -12,7 +12,7 @@ class MessageRoutes(private val messageService: MessageService) {
         return "/messages" meta {
             summary = "Create message"
             description = "Create a new message"
-            receiving(messageCreationRequestLens to MessageCreationRequest(UUID.randomUUID(), "Hello"))
+            receiving(messageCreationRequestLens to MessageCreationRequest(UUID.randomUUID(), UUID.randomUUID(),"Hello"))
             returning(Status.OK to "Message creation status.")
         } bindContract Method.POST to { req: Request ->
             messageCreationRequestLens(req).let { messageCreationRequest ->

@@ -1,0 +1,78 @@
+.register-container {
+    background-color: #424242; /* Zielony kolor tła */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 100vw;
+    font-family: Arial, sans-serif;
+}
+
+.register-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}
+
+input:focus {
+    border-color: #424242;
+    outline: none;
+}
+
+button.btn-submit {
+    background-color: #424242;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button.btn-submit:hover {
+    background-color: #5e5e5e;
+}
+
+.login-link {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #555;
+}
+
+.login-link a {
+    color: #424242;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+    background-color: #e4e4e4;
+}

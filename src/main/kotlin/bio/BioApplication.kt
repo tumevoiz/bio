@@ -46,6 +46,7 @@ fun main() {
 
     val authenticationService = BearerTokenAuthenticationService(cachingProvider, userRepository, hashingAlgorithm)
     val channelService = ChannelService(channelRepository)
+    val messageService = MessageService(messageRepository)
 
     val authenticationRoutes = AuthenticationRoutes(authenticationService)
     val authFilter = AuthenticationFilter(authenticationService)
@@ -54,7 +55,6 @@ fun main() {
     val userRoutes = UserRoutes(userService)
 
     val channelRoutes = ChannelRoutes(channelService)
-    val messageService = MessageService(messageRepository)
     val messageRoutes = MessageRoutes(messageService)
 
     val contract = contract {

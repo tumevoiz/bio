@@ -5,6 +5,7 @@ import org.http4k.contract.meta
 import org.http4k.core.*
 import org.http4k.format.Jackson.auto
 import org.http4k.format.Jackson.json
+import java.util.UUID
 
 class ChannelRoutes(private val channelService: ChannelService) {
     fun createChannel(): ContractRoute {
@@ -27,12 +28,15 @@ class ChannelRoutes(private val channelService: ChannelService) {
     }
 
     fun getChannels(): ContractRoute {
+        val responseLens = Body.auto<Collection<Channel>>().toLens()
+
         return "/channels" meta {
             summary = "Get channels list"
             description = "Get channels list"
-            returning(Status.OK)
+            returning(Status.OK, responseLens to listOf(Channel(UUID.randomUUID(),"Nazwa kanału")))
         } bindContract Method.GET to { req: Request ->
             val channels = channelService.getAll();
+
             Response(Status.OK).json(channels);
         }
     }
