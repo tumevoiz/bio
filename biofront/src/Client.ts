@@ -22,7 +22,7 @@ export class Client {
    * Login
    * @return Authentication token
    */
-  postApiLogin(body: any): Promise<void> {
+  postApiLogin(body: any): Promise<{ token: string }> {
     let url_ = this.baseUrl + "/api/login";
     url_ = url_.replace(/[?&]$/, "");
 
@@ -41,19 +41,23 @@ export class Client {
     });
   }
 
-  protected processPostApiLogin(response: Response): Promise<void> {
+
+  protected processPostApiLogin(response: Response): Promise<{ token: string }> {
     const status = response.status;
-    let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); }
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    }
     if (status === 200) {
-      return response.text().then((_responseText) => {
-        return;
+      return response.json().then((_responseText) => {
+        return { token: _responseText.token };
       });
     } else if (status !== 200 && status !== 204) {
       return response.text().then((_responseText) => {
         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
       });
     }
-    return Promise.resolve<void>(null as any);
+    return Promise.resolve({ token: '' });
   }
 
   /**
@@ -93,6 +97,60 @@ export class Client {
     }
     return Promise.resolve<void>(null as any);
   }
+
+  postApiRefresh(body: { username: string }): Promise<void> {
+    let url_ = this.baseUrl + "/api/refresh";
+    url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: RequestInit = {
+      body: content_,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    };
+
+    return this.http.fetch(url_, options_).then((_response: Response) => {
+      return this.processPostApiRefresh(_response);
+    });
+  }
+
+  protected processPostApiRefresh(response: Response): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && response.headers.forEach) {
+      response.headers.forEach((v: any, k: any) => _headers[k] = v);
+    }
+    if (status === 200) {
+      return response.text().then((_responseText) => {
+        // Możesz tu dodać logikę zapisu tokenu
+        const token = JSON.parse(_responseText).token;
+        localStorage.setItem('token', token);
+        return;
+      });
+    } else if (status !== 200 && status !== 204) {
+      return response.text().then((_responseText) => {
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+      });
+    }
+    return Promise.resolve<void>(null as any);
+  }
+
+  // Metoda do obsługi odświeżania tokenu
+  refreshToken(username: string): Promise<string> {
+    return this.postApiRefresh({ username }).then(() => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not received');
+      }
+      return token;
+    });
+  }
+
+
+
 }
 
 export class ApiException extends Error {
@@ -125,3 +183,5 @@ function throwException(message: string, status: number, response: string, heade
   else
     throw new ApiException(message, status, response, headers, null);
 }
+
+
