@@ -1,7 +1,9 @@
 package bio.channels
 
+import java.util.UUID
+
 data class Channel(
-    val id: Int,
+    val id: UUID,
     val name: String,
 )
 

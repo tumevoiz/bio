@@ -1,7 +1,8 @@
 package bio.channels
 
 import bio.prelude.Repository
+import java.util.UUID
 
-interface ChannelRepository : Repository<Int, ChannelRow> {
+interface ChannelRepository : Repository<UUID, ChannelRow> {
     fun getAll(): Collection<ChannelRow>;
 }

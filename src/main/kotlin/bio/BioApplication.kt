@@ -11,6 +11,9 @@ import bio.users.UnsafeUserRepository
 import bio.users.UserRepository
 import bio.users.UserRoutes
 import bio.users.UserService
+import bio.messages.MessageRoutes
+import bio.messages.MessageService
+import bio.messages.UnsafeMessageRepository
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic
 import org.http4k.contract.bind
 import org.http4k.contract.contract
@@ -47,9 +50,11 @@ fun main() {
 
     val userRepository = UnsafeUserRepository(connector)
     val channelRepository = UnsafeChannelRepository(connector)
+    val messageRepository = UnsafeMessageRepository(connector)
 
     val authenticationService = BearerTokenAuthenticationService(cachingProvider, userRepository, hashingAlgorithm)
     val channelService = ChannelService(channelRepository)
+    val messageService = MessageService(messageRepository)
 
     val authenticationRoutes = AuthenticationRoutes(authenticationService)
 
@@ -57,6 +62,7 @@ fun main() {
     val userRoutes = UserRoutes(userService)
 
     val channelRoutes = ChannelRoutes(channelService)
+    val messageRoutes = MessageRoutes(messageService)
 
     val contract = contract {
         renderer = OpenApi3(
@@ -69,6 +75,7 @@ fun main() {
         routes += userRoutes.createUser()
         routes += channelRoutes.createChannel()
         routes += channelRoutes.getChannels()
+        routes += messageRoutes.createMessage()
     }
 
     val api = routes(
