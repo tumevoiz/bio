@@ -44,4 +44,10 @@ class RedisCachingProvider(
             else -> throw MalformedTokenException()
         }
     }
+
+    override fun getUsernameByToken(token: BearerToken): String? {
+        val key = jedis?.keys("*token")
+            ?.filter { token.value == jedis?.get(it)?.let { it1 -> parseToken(it1).first } }
+        return key?.single()?.replace("_token", "")
+    }
 }

@@ -7,4 +7,6 @@ interface AuthenticationCachingFeatures<T : Token> {
     ): Boolean
 
     fun getTokenForUser(username: String): T
+
+    fun getUsernameByToken(token: T): String?
 }
