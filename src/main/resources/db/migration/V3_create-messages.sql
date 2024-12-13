@@ -1,0 +1,9 @@
+CREATE TABLE messages (
+    id VARCHAR(36) NOT NULL,
+    user_id VARCHAR(36) NOT NULL,
+    channel_id VARCHAR(36) NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id)
+);
