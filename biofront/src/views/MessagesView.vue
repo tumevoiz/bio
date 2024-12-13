@@ -32,6 +32,12 @@
                 {{ channel.name }}
               </q-item-section>
             </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="logout" />
+              </q-item-section>
+              <q-item-section @click="logout"> Wyloguj </q-item-section>
+            </q-item>
           </q-list>
         </q-scroll-area>
       </q-drawer>
@@ -66,6 +72,10 @@ onMounted(async () => {
 const onChannelItemClick = (id: string) => {
   leftDrawerOpen.value = false
   router.push({ name: 'channel', params: { id } })
+}
+const logout = () => {
+  localStorage.removeItem('token')
+  router.push({ path: '/login' })
 }
 </script>
 
