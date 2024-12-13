@@ -6,7 +6,7 @@ import org.http4k.contract.meta
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.OK
 import org.http4k.format.Jackson.auto
-import org.http4k.format.Moshi.json
+import org.http4k.format.Jackson.json
 
 class AuthenticationRoutes(private val authenticationService: AuthenticationService<*>) {
     fun login(): ContractRoute {
@@ -19,7 +19,7 @@ class AuthenticationRoutes(private val authenticationService: AuthenticationServ
         } bindContract Method.POST to { req: Request ->
             authenticationRequestLens(req).let { authenticationRequest ->
                 val token = authenticationService.authenticate(authenticationRequest)
-                Response(OK).json(AuthenticationResponse(token.toString()))
+                Response(OK).json(AuthenticationResponse(token.value))
             }
         }
     }

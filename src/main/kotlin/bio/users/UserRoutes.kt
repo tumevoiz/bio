@@ -1,13 +1,9 @@
 package bio.users
 
-import bio.auth.AuthenticationRequest
-import bio.auth.AuthenticationResponse
-import bio.auth.AuthenticationService
 import org.http4k.contract.ContractRoute
 import org.http4k.contract.meta
 import org.http4k.core.*
 import org.http4k.format.Jackson.auto
-import org.http4k.format.Moshi.json
 
 class UserRoutes(private val userService: UserService) {
     fun createUser(): ContractRoute {
