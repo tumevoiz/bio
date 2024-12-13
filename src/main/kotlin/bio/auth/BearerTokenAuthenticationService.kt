@@ -3,6 +3,7 @@ package bio.auth
 import bio.data.CachingProvider
 import bio.prelude.HashingAlgorithm
 import bio.users.UserRepository
+import java.util.UUID
 
 class BearerTokenAuthenticationService(
     private val cachingProvider: CachingProvider<BearerToken>,
@@ -27,6 +28,17 @@ class BearerTokenAuthenticationService(
         }
 
         return token
+    }
+
+    override fun getUserUUIDByToken(token: BearerToken): UUID? {
+        val username = cachingProvider.getUsernameByToken(token)
+        println("Got username $username")
+        username?.let {
+            val user = userRepository.findByUsername(it)
+            return user?.id
+        }
+
+        return null
     }
 
     override fun isAuthenticated(

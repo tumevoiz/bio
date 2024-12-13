@@ -71,8 +71,6 @@ dependencies {
     implementation("org.http4k:http4k-contract")
     implementation("org.http4k:http4k-core")
     implementation("org.http4k:http4k-format-jackson")
-    implementation("org.http4k:http4k-format-kotlinx-serialization")
-    implementation("org.http4k:http4k-format-moshi")
     implementation("org.http4k:http4k-opentelemetry")
     implementation("org.http4k:http4k-server-undertow")
     implementation("org.postgresql:postgresql:42.7.4")
