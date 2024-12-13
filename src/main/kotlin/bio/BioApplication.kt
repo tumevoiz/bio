@@ -8,6 +8,9 @@ import bio.users.UnsafeUserRepository
 import bio.users.UserRepository
 import bio.users.UserRoutes
 import bio.users.UserService
+import bio.messages.MessageRoutes
+import bio.messages.MessageService
+import bio.messages.UnsafeMessageRepository
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic
 import org.http4k.contract.bind
 import org.http4k.contract.contract
@@ -43,6 +46,7 @@ fun main() {
     val hashingAlgorithm = Argon2HashingAlgorithm()
 
     val userRepository = UnsafeUserRepository(connector)
+    val messageRepository = UnsafeMessageRepository(connector)
 
     val authenticationService = BearerTokenAuthenticationService(cachingProvider, userRepository, hashingAlgorithm)
 
@@ -50,6 +54,9 @@ fun main() {
 
     val userService = UserService(hashingAlgorithm, userRepository)
     val userRoutes = UserRoutes(userService)
+
+    val messageService = MessageService(messageRepository)
+    val messageRoutes = MessageRoutes(messageService)
 
     val contract = contract {
         renderer = OpenApi3(
@@ -60,6 +67,7 @@ fun main() {
         descriptionPath = "/docs/openapi.json"
         routes += authenticationRoutes.login()
         routes += userRoutes.createUser()
+        routes += messageRoutes.createMessage()
     }
 
     val api = routes(
