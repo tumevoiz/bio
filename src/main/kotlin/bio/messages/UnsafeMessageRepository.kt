@@ -16,8 +16,7 @@ class UnsafeMessageRepository(
                 throw MessageNotCreatedException()
             }
 
-            val found = findMessageByUserId(row.userId)
-            return found
+            return row
         }
     }
 
@@ -29,20 +28,20 @@ class UnsafeMessageRepository(
         "insert into messages values ('${row.id}', '${row.userId}', '${row.channelId}', '${row.message}', '${row.sentAt}')"
     }
 
-    override fun findAllMessages(): List<MessageRow> {
-        TODO("Not yet implemented")
+    override fun findMessagesByChannelId(channelId: UUID): List<MessageRow> {
+        val messages = mutableListOf<MessageRow>()
+        connection ?: return messages
+
+        val stmt = connection.createStatement()
+        val rs = stmt.executeQuery(findMessagesByChannelIdQuery(channelId))
+        while (rs.next()) {
+            messages.add(MessageRow.fromResultSet(rs))
+        }
+
+        return messages.toList()
     }
 
-    override fun findMessageByUserId(userId: UUID): MessageRow? {
-        TODO("Not yet implemented")
+    private val findMessagesByChannelIdQuery = { channelId: UUID ->
+        "select * from messages where channel_id='${channelId}'"
     }
-
-    override fun findMessageByChanelId(channelId: UUID): MessageRow? {
-        TODO("Not yet implemented")
-    }
-
-    override fun findMessageByContent(message: String): MessageRow? {
-        TODO("Not yet implemented")
-    }
-
 }
