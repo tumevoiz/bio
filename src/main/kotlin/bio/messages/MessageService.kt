@@ -6,12 +6,11 @@ import java.util.UUID
 class MessageService(
     private val messageRepository: MessageRepository,
 ) {
-    fun createMessage(request: MessageCreationRequest): Message {
-        // TODO: userId as a parameter
+    fun createMessage(request: MessageCreationRequest, userUUID: UUID): Message {
         val messageRow =
             MessageRow(
                 id = UUID.randomUUID(),
-                userId = request.userId,
+                userId = userUUID,
                 channelId = request.channelId,
                 message = request.message,
                 sentAt = OffsetDateTime.now(),
@@ -20,5 +19,10 @@ class MessageService(
         val createdMessageRow = messageRepository.create(messageRow)
         return createdMessageRow?.toDomainObject()
             ?: throw MessageNotCreatedException()
+    }
+
+    fun getChannelMessages(channelUUID: UUID): List<Message> {
+        val messages = messageRepository.findMessagesByChannelId(channelUUID)
+        return messages.map { it.toDomainObject() }
     }
 }

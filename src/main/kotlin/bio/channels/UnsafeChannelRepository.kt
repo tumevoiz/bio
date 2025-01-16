@@ -10,17 +10,17 @@ class UnsafeChannelRepository(
 ) : ChannelRepository {
     private val connection: Connection? = connector.retrieve();
 
-    override fun getAll(): Collection<ChannelRow> {
-        return connection?.let {
-            val result = emptyList<ChannelRow>().toMutableList();
-            val st = it.createStatement();
-            val rs = st.executeQuery("select id, name from channels");
+    override fun getAll(): List<ChannelRow> {
+        val channels = mutableListOf<ChannelRow>()
+        connection ?: return channels
+        val st = connection.createStatement();
+        val rs = st.executeQuery("select id, name from channels");
 
-            while (rs.next()) {
-                result += ChannelRow.fromResultSet(rs)
-            }
-            return result;
-        } ?: emptyList<ChannelRow>();
+        while (rs.next()) {
+            channels.add(ChannelRow.fromResultSet(rs))
+        }
+
+        return channels
     }
 
     override fun create(row: ChannelRow): ChannelRow? {

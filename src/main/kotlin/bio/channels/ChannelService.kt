@@ -9,7 +9,7 @@ class ChannelService(private val channelRepository: ChannelRepository) {
         return created?.toDomainObject();
     }
 
-    fun getAll(): Collection<Channel> {
+    fun getAll(): List<Channel> {
         val rows = channelRepository.getAll();
         return rows.map { x -> x.toDomainObject() }
     }

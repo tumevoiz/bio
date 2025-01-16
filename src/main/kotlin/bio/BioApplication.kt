@@ -67,9 +67,10 @@ fun main() {
         routes += authenticationRoutes.login()
         routes += userRoutes.createUser()
         routes += healthRoute(authFilter)
-        routes += channelRoutes.createChannel()
-        routes += channelRoutes.getChannels()
-        routes += messageRoutes.createMessage()
+        routes += channelRoutes.createChannel(authFilter)
+        routes += channelRoutes.getChannels(authFilter)
+        routes += messageRoutes.createMessage(authFilter)
+        routes += messageRoutes.getChannelMessages(authFilter)
     }
 
     val api = routes(
