@@ -24,13 +24,37 @@ import org.http4k.contract.ui.swaggerUiLite
 import org.http4k.core.*
 import org.http4k.core.Status.Companion.OK
 import org.http4k.filter.CorsPolicy
+import org.http4k.filter.DebuggingFilters
 import org.http4k.filter.ServerFilters
 import org.http4k.format.Jackson
 import org.http4k.routing.routes
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
 
+
 private const val HTTP_SERVER_PORT = 9000
+
+val corsMiddleware = Filter { next ->
+    { request ->
+        if (request.method == Method.OPTIONS) {
+            // Respond to preflight requests
+            Response(Status.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+                .header("Access-Control-Max-Age", "3600")
+        } else {
+            // Handle other requests and add CORS headers
+            val response = next(request)
+            response
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                .header("Access-Control-Allow-Headers", "Authorization, Content-Type")
+        }
+    }
+}
+
+
 
 fun main() {
     val cachingProviderConfig = Config.fromApplicationConfig<CachingProviderConfig>(Config.CACHE)
@@ -66,6 +90,7 @@ fun main() {
         descriptionPath = "/docs/openapi.json"
         routes += authenticationRoutes.login()
         routes += userRoutes.createUser()
+        routes += userRoutes.getUser(authFilter)
         routes += healthRoute(authFilter)
         routes += channelRoutes.createChannel(authFilter)
         routes += channelRoutes.getChannels(authFilter)
@@ -80,7 +105,7 @@ fun main() {
         }
     )
 
-    val server = ServerFilters.Cors(CorsPolicy.UnsafeGlobalPermissive).then(api).asServer(Undertow(HTTP_SERVER_PORT)).start()
+    val server = DebuggingFilters.PrintRequestAndResponse().then(corsMiddleware).then(api).asServer(Undertow(HTTP_SERVER_PORT)).start()
 
     println("Server started on " + server.port())
 }

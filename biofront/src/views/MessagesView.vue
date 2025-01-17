@@ -52,13 +52,12 @@
 </template>
 
 <script setup lang="ts">
-import { Channel, Client } from '@/Client'
 import { onMounted, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
+import {ApiService, type Channel, OpenAPI} from "@/components/client";
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
-const client = new Client()
 const channels: Ref<Channel[]> = ref([])
 
 const toggleLeftDrawer = () => {
@@ -66,7 +65,9 @@ const toggleLeftDrawer = () => {
 }
 
 onMounted(async () => {
-  channels.value = await client.getApiChannels()
+  OpenAPI.TOKEN = localStorage.getItem('token') as string
+  console.log(OpenAPI.TOKEN)
+  channels.value = await ApiService.getApiChannels()
 })
 
 const onChannelItemClick = (id: string) => {

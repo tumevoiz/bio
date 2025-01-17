@@ -33,15 +33,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import {ApiService} from "@/components/client";
 
 const router = useRouter()
 const username = ref('')
 const password = ref('')
 
+import { OpenAPI } from '@/components/client';
+
 const loginUser = async (): Promise<void> => {
   try {
     // Możesz dodać logikę logowania tutaj
-    localStorage.setItem('token', 'test')
+    let response = await ApiService.postApiLogin({
+      username: username.value,
+      password: {
+        value: password.value
+      }
+    })
+    console.log(response)
+
+    localStorage.setItem('token', response["token"])
     router.push({ path: '/' })
   } catch (error) {
     console.error('Login failed:', error)

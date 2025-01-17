@@ -8,3 +8,7 @@ open class UserException(
 class UserNotCreatedException(
     cause: Throwable? = null,
 ) : UserException("Cannot create user!", cause)
+
+class UserNotFoundException(
+    cause: Throwable? = null,
+) : UserException("Cannot find user!", cause)

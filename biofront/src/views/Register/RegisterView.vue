@@ -34,24 +34,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Client, PlaintextPassword, UserCreationRequest } from '@/Client'
+import {ApiService} from "@/components/client";
 
 const username = ref('')
 const password = ref('')
-const client = new Client()
 
 const registerUser = async () => {
   try {
-    // Tworzenie obiektu z danymi, które mają być wysłane w żądaniu
-    const request = new UserCreationRequest({
+    let request = await ApiService.postApiUsers({
       username: username.value,
-      password: new PlaintextPassword({
-        value: password.value, // "value" wewnątrz obiektu password
-      }),
+      password: {
+        value: password.value
+      }
     })
 
-    // Wywołanie endpointu /api/users z danymi w formacie JSON
-    await client.postApiUsers(request)
+    console.log(username.value)
+    console.log(password.value)
+
     alert('User registered successfully!')
   } catch (error) {
     console.error('Registration failed:', error)

@@ -22,6 +22,17 @@ class UnsafeUserRepository(
         }
     }
 
+    override fun findByUUID(uuid: UUID): UserRow? {
+        return connection?.let {
+            val stmt = it.createStatement()
+            val rs = stmt.executeQuery(findByUUIDQuery(uuid))
+            if (!rs.next()) {
+                return null
+            }
+            return UserRow.fromResultSet(rs)
+        }
+    }
+
     override fun create(row: UserRow): UserRow? {
         return connection?.let {
             val stmt = it.createStatement()
@@ -42,6 +53,11 @@ class UnsafeUserRepository(
     private val findByUsernameQuery = { username: String ->
         "select * from users WHERE username='$username'"
     }
+
+    private val findByUUIDQuery = { uuid: UUID ->
+        "select * from users WHERE id='${uuid.toString()}'"
+    }
+
 
     private val createUserUpdate = { row: UserRow ->
         "insert into users values ('${row.id}', '${row.username}', '${row.password}')"

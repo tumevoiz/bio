@@ -20,4 +20,9 @@ class UserService(
         return createdUserRow?.toDomainObject()
             ?: throw UserNotCreatedException()
     }
+
+    fun getUser(userUUID: UUID): User {
+        val user = userRepository.findByUUID(userUUID) ?: throw UserNotFoundException()
+        return user.toDomainObject()
+    }
 }

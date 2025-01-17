@@ -1,11 +1,13 @@
 package bio.auth
 
+import java.util.UUID
+
 
 data class BearerToken(
     override val value: String,
 ) : Token {
     companion object {
-        fun generateToken(): BearerToken = BearerToken("test")
+        fun generateToken(): BearerToken = BearerToken(UUID.randomUUID().toString().substring(0,15))
 
         const val FINGERPRINT: String = "bearer"
     }
